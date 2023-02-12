@@ -3,7 +3,7 @@ package models
 import "web/db"
 
 type Produto struct {
-	id         int
+	Id         int
 	Nome       string
 	Descricao  string
 	Preco      float64
@@ -35,6 +35,7 @@ func BuscaTodosOsProdutos() []Produto {
 			panic(err.Error())
 		}
 
+		p.Id = id
 		p.Nome = nome
 		p.Descricao = descricao
 		p.Preco = preco
@@ -44,5 +45,66 @@ func BuscaTodosOsProdutos() []Produto {
 	}
 
 	return produtos
+
+}
+
+func CriarNovoProduto(nome, descricao string, preco float64, quantidade int) {
+	db := db.ConectaComBancoDeDados()
+	defer db.Close()
+
+	insereDadosNoBanco, err := db.Prepare("insert into produtos(nome, descricao, preco, quantidade) values ($1, $2, $3, $4)")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	insereDadosNoBanco.Exec(nome, descricao, preco, quantidade)
+
+}
+
+func DeletaProduto(id string) {
+	db := db.ConectaComBancoDeDados()
+	defer db.Close()
+
+	deletarOProduto, err := db.Prepare("delete from produtos where id=$1")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	deletarOProduto.Exec(id)
+}
+
+func EditaProduto(id string) Produto {
+
+	db := db.ConectaComBancoDeDados()
+	defer db.Close()
+
+	produtoDoBanco, err := db.Query("select * from produtos where id=$1", id)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	produtoParaAtualizer := Produto{}
+
+	for produtoDoBanco.Next() {
+		var id, quantidade int
+		var nome, descricao string
+		var preco float64
+
+		err = produtoDoBanco.Scan(&id, &nome, &descricao, &preco, &quantidade)
+
+		if err != nil {
+			panic(err.Error())
+		}
+
+		produtoParaAtualizer.Nome = nome
+		produtoParaAtualizer.Descricao = descricao
+		produtoParaAtualizer.Preco = preco
+		produtoParaAtualizer.Quantidade = quantidade
+	}
+
+	return produtoParaAtualizer
 
 }
