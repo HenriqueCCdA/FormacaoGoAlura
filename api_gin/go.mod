@@ -1,4 +1,4 @@
-module api-api-gin
+module api-rest-gin
 
 go 1.19
 
