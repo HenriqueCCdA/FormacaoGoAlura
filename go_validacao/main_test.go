@@ -2,11 +2,13 @@ package main
 
 import (
 	"api-go-gin-val/controllers"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 )
 
 func SetupDasRotasDeTeste() *gin.Engine {
@@ -28,7 +30,9 @@ func TestStatusCodeDaSaudacaoComParamentro(t *testing.T) {
 
 	r.ServeHTTP(resp, req)
 
-	if resp.Code != http.StatusOK {
-		t.Fatalf("Status error: valor  recebido foi %d e o esperado era %d", resp.Code, http.StatusOK)
-	}
+	assert.Equal(t, http.StatusOK, resp.Code, "Deveriam ser iguais")
+	mockDaReposta := `{"API diz:":"E ai gui, tudo beleza?"}`
+	repostaBody, _ := ioutil.ReadAll(resp.Body)
+	assert.Equal(t, mockDaReposta, string(repostaBody))
+
 }
