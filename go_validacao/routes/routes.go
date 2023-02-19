@@ -1,8 +1,9 @@
 package routes
 
 import (
+	"api-go-gin-val/controllers"
+
 	"github.com/gin-gonic/gin"
-	"github.com/guilhermeonrails/api-go-gin/controllers"
 )
 
 func HandleRequests() {

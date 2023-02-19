@@ -1,9 +1,9 @@
 package database
 
 import (
+	"api-go-gin-val/models"
 	"log"
 
-	"github.com/guilhermeonrails/api-go-gin/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

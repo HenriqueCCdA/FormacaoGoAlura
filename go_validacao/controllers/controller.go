@@ -1,11 +1,11 @@
 package controllers
 
 import (
+	"api-go-gin-val/database"
+	"api-go-gin-val/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/guilhermeonrails/api-go-gin/database"
-	"github.com/guilhermeonrails/api-go-gin/models"
 )
 
 func ExibeTodosAlunos(c *gin.Context) {
